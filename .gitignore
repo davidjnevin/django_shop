@@ -1,0 +1,140 @@
+# django #
+*.log
+*.pot
+*.pyc
+__pycache__
+db.sqlite3
+media
+
+# backup files #
+*.bak
+
+# if you are using pycharm #
+# user-specific stuff
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/**/usage.statistics.xml
+.idea/**/dictionaries
+.idea/**/shelf
+
+# aws user-specific
+.idea/**/aws.xml
+
+# generated files
+.idea/**/contentmodel.xml
+
+# sensitive or high-churn files
+.idea/**/datasources/
+.idea/**/datasources.ids
+.idea/**/datasources.local.xml
+.idea/**/sqldatasources.xml
+.idea/**/dynamic.xml
+.idea/**/uidesigner.xml
+.idea/**/dbnavigator.xml
+
+# gradle
+.idea/**/gradle.xml
+.idea/**/libraries
+
+# file-based project format
+*.iws
+
+# intellij
+out/
+
+# jira plugin
+atlassian-ide-plugin.xml
+
+# python #
+*.py[cod]
+*$py.class
+
+# distribution / packaging
+.python build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+*.manifest
+*.spec
+
+# installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# unit test / coverage reports
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+.pytest_cache/
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+
+# jupyter notebook
+.ipynb_checkpoints
+
+# pyenv
+.python-version
+
+# celery
+celerybeat-schedule.*
+
+# sagemath parsed files
+*.sage.py
+
+# environments
+.env
+.venv
+env/
+venv/
+env/
+env.bak/
+venv.bak/
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+
+# sublime text #
+*.tmlanguage.cache
+*.tmpreferences.cache
+*.sttheme.cache
+*.sublime-workspace
+*.sublime-project
+
+# sftp configuration file
+sftp-config.json
+
+# package control specific files package
+control.last-run
+control.ca-list
+control.ca-bundle
+control.system-ca-bundle
+github.sublime-settings
+
+# visual studio code #
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history
+
+
+
