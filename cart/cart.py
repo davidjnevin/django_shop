@@ -21,10 +21,7 @@ class Cart:
         """
         product_id = str(product.id)
         if product_id not in self.cart:
-            self.cart[product_id]["quantity"] = {
-                "quantity": 0,
-                "price": str(product.price),
-            }
+            self.cart[product_id] = {"quantity": 0, "price": str(product.price)}
         if override_quantity:
             self.cart[product_id]["quantity"] = quantity
         else:
@@ -48,7 +45,7 @@ class Cart:
         """
         Iterate over the items in the cart and get the products from the database.
         """
-        product_ids = self.cark.keys()
+        product_ids = self.cart.keys()
         # get the product objects and add them to the cart.
         products = Product.objects.filter(id__in=product_ids)
         cart = self.cart.copy()
