@@ -16,7 +16,7 @@ class OrderAdmin(admin.ModelAdmin):
         "last_name",
         "email",
         "address",
-        "post_code",
+        "postal_code",
         "city",
         "paid",
         "created",
@@ -24,6 +24,3 @@ class OrderAdmin(admin.ModelAdmin):
     ]
     list_filter = ["paid", "created", "updated"]
     inlines = [OrderItemInline]
-
-
-# Register your models here.
