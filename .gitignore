@@ -9,6 +9,10 @@ media
 # backup files #
 *.bak
 *.un~
+
+# macOS
+*.DS_Store
+
 # if you are using pycharm #
 # user-specific stuff
 .idea/**/workspace.xml
