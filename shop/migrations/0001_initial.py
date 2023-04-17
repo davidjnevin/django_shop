@@ -79,8 +79,6 @@ class Migration(migrations.Migration):
         ),
         migrations.AddIndex(
             model_name="product",
-            index=models.Index(
-                fields=["-created"], name="shop_produc_created_ef211c_idx"
-            ),
+            index=models.Index(fields=["-created"], name="shop_produc_created_ef211c_idx"),
         ),
     ]
