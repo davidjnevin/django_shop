@@ -1,0 +1,69 @@
+version: '3.9'
+
+x-app-common: &app-common
+    image: shop_project:prod
+    build:
+      dockerfile: dockerfiles/Dockerfile
+      context: .
+    stdin_open: true
+    tty: true
+    env_file:
+      - ./.env
+    restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - postgres_socket:/var/run/postgresql
+      - ./:/app
+services:
+  db:
+    container_name: shop_project_database
+    image: postgres:14.5
+    env_file:
+      - ./.env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+      - postgres_socket:/var/run/postgresql/
+    healthcheck:
+      test: pg_isready -q --username=$$POSTGRES_USER --dbname=$$POSTGRES_DB
+      timeout: 45s
+      interval: 10s
+      retries: 10
+    restart: always
+  redis:
+    container_name: shop_project_redis
+    image: redis:latest
+    restart: always
+    healthcheck:
+      test: redis-cli ping
+      timeout: 45s
+      interval: 10s
+      retries: 10
+  celery:
+    container_name: shop_project_celery_worker
+    command: worker
+    <<: *app-common
+  django:
+    container_name: shop_project_django
+    command: server
+    ports:
+      - 8000:8000
+    stdin_open: true
+    tty: true
+    <<: *app-common
+  nginx:
+    image: nginx:1.23.1
+    restart: always
+    volumes:
+      - ./config/nginx:/etc/nginx/templates
+      - .:/app
+    ports:
+      - "80:80"
+
+
+volumes:
+  postgres_data:
+  postgres_socket:
