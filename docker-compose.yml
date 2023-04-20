@@ -1,38 +1,39 @@
 version: '3.9'
 
 x-app-common: &app-common
-    image: shop_project:prod
-    build:
-      dockerfile: dockerfiles/Dockerfile
-      context: .
-    stdin_open: true
-    tty: true
-    env_file:
-      - ./.env
-    restart: always
-    depends_on:
-      db:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-    volumes:
-      - postgres_socket:/var/run/postgresql
-      - ./:/app
+  image: davidjnevin/shop_django:dev
+  build:
+    dockerfile: dockerfiles/Dockerfile
+    context: .
+  stdin_open: true
+  tty: true
+  env_file:
+    - ./.env
+  restart: always
+  depends_on:
+    db:
+      condition: service_healthy
+    redis:
+      condition: service_healthy
+  volumes:
+    - postgres_socket:/var/run/postgresql
+    - ./:/app
+
 services:
   db:
-    container_name: shop_project_database
+    container_name: shop_database
     image: postgres:14.5
     env_file:
       - ./.env
-    volumes:
-      - postgres_data:/var/lib/postgresql/data/
-      - postgres_socket:/var/run/postgresql/
+    restart: always
     healthcheck:
-      test: pg_isready -q --username=$$POSTGRES_USER --dbname=$$POSTGRES_DB
+      test: pg_isready -q --username=$$POSTGRES_USER --dbname=$$POSTGRES_NAME
       timeout: 45s
       interval: 10s
       retries: 10
-    restart: always
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+      - postgres_socket:/var/run/postgresql/
   redis:
     container_name: shop_project_redis
     image: redis:latest
@@ -46,12 +47,12 @@ services:
     container_name: shop_project_celery_worker
     command: worker
     <<: *app-common
-  django:
+  shop:
     container_name: shop_project_django
     command: server
-    ports:
-      - 8000:8000
     stdin_open: true
+    ports:
+      - "8000:8000"
     tty: true
     <<: *app-common
   nginx:
@@ -59,10 +60,9 @@ services:
     restart: always
     volumes:
       - ./config/nginx:/etc/nginx/templates
-      - .:/app
+      - ./:/app
     ports:
-      - "80:80"
-
+      - "84:84"
 
 volumes:
   postgres_data:
