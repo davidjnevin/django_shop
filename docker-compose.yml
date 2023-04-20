@@ -1,7 +1,7 @@
 version: '3.9'
 
 x-app-common: &app-common
-  image: davidjnevin/shop_django:dev
+  image: davidjnevin/shop_django:prod
   build:
     dockerfile: dockerfiles/Dockerfile
     context: .
@@ -30,7 +30,7 @@ services:
       - ./.env
     restart: always
     healthcheck:
-      test: pg_isready -q --username=$$POSTGRES_USER --dbname=$$POSTGRES_NAME
+      test: pg_isready -q --username=$$POSTGRES_USER --dbname=$$POSTGRES_DB
       timeout: 45s
       interval: 10s
       retries: 10
@@ -60,6 +60,8 @@ services:
       - "8000:8000"
     tty: true
     <<: *app-common
+    networks:
+      - nginx_default
   nginx:
     container_name: shop_nginx
     image: nginx:1.23.1

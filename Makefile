@@ -1,7 +1,7 @@
 SHELL=/bin/bash
 DOCKER_COMPOSE=docker compose
 DOCKER_ENVIRONMENT=docker-compose.yml
-PRE_RUN_API_COMMAND=${DOCKER_COMPOSE} -f ${DOCKER_ENVIRONMENT} run --rm django
+PRE_RUN_API_COMMAND=${DOCKER_COMPOSE} -f ${DOCKER_ENVIRONMENT} run --rm shop
 PACKAGE_NAME=myshop
 VENV_FOLDER=venv
 LAUNCH_IN_VENV=source ${VENV_FOLDER}/bin/activate &&
