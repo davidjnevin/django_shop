@@ -75,20 +75,10 @@ case $1 in
 	"server")
 		wait_other_containers ;\
 		django_operations ;\
-		if [ "$DJANGO_DEBUG" = "true" ]; then
-			gunicorn \
-				--reload \
-				--bind 0.0.0.0:8000 \
-				--workers 2 \
-				--worker-class eventlet \
-				--log-level DEBUG \
-				--access-logfile "-" \
-				--error-logfile "-" \
-				myshop.wsgi
-		else
-			python manage.py runserver 0.0.0.0:8000
-		fi
-		;;
+		wait_other_containers ;\
+                django_operations ;\
+                uwsgi --ini /app/config/uwsgi/uwsgi.ini
+                ;;
 	"createsuperuser")
 		wait_other_containers ;\
 		django_operations ;\
