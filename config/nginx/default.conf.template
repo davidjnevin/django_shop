@@ -1,0 +1,26 @@
+# upstream for uWSGI
+upstream uwsgi_app {
+    server unix:/app/uwsgi_app.sock;
+}
+
+server {
+    listen 84;
+    server_name localhost 0.0.0.0;
+    # server_name shop.project.davidnevin.net;
+    error_log stderr warn;
+    access_log /dev/stdout main;
+
+    location / {
+        include /etc/nginx/uwsgi_params;
+        uwsgi_pass uwsgi_app;
+    }
+
+    location /static/ {
+        alias /app/static/;
+    }
+
+    location /media/ {
+        alias /app/media/;
+    }
+
+}
