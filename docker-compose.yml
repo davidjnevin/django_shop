@@ -46,6 +46,8 @@ services:
       timeout: 45s
       interval: 10s
       retries: 10
+    networks:
+      - nginx_default
   celery:
     container_name: shop_project_celery_worker
     command: worker
@@ -59,6 +61,7 @@ services:
     tty: true
     <<: *app-common
   nginx:
+    container_name: shop_nginx
     image: nginx:1.23.1
     restart: always
     volumes:
@@ -66,6 +69,9 @@ services:
       - ./:/app
     ports:
       - "84:84"
+    networks:
+      - nginx_default
+
 
 volumes:
   postgres_data:

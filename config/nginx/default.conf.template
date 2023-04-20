@@ -5,8 +5,8 @@ upstream uwsgi_app {
 
 server {
     listen 84;
-    server_name localhost 0.0.0.0;
-    # server_name shop.project.davidnevin.net;
+    # server_name localhost 0.0.0.0;
+    server_name shop.project.davidnevin.net;
     error_log stderr warn;
     access_log /dev/stdout main;
 

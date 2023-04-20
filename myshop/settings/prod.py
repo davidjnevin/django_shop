@@ -9,8 +9,7 @@ ADMINS = [ (os.environ.get("ADMIN_NAME"), os.environ.get("ADMIN_EMAIL")), ]
 
 SECRET_KEY = os.environ.get("SECRET_KEY")
 
-# ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", default="localhost").split(" ")
-ALLOWED_HOSTS = ["127.0.0.1", "localhost", "*"]
+ALLOWED_HOSTS = shop.project.davidnevin.net
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
