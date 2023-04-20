@@ -144,3 +144,4 @@ github.sublime-settings
 
 static/
 data/
+*.swp
