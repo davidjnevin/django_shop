@@ -1,33 +1,20 @@
 version: '3.9'
 
-x-app-common: &app-common
-  image: davidjnevin/shop_django:prod
-  build:
-    dockerfile: dockerfiles/Dockerfile
-    context: .
-  stdin_open: true
-  tty: true
-  env_file:
-    - ./.env
-  restart: always
-  depends_on:
-    db:
-      condition: service_healthy
-    redis:
-      condition: service_healthy
-  volumes:
-    - postgres_socket:/var/run/postgresql
-    - ./:/app
-  networks:
-    - nginx_default
-
 
 services:
   db:
+    build:
+      dockerfile: dockerfiles/Dockerfile
+      context: .
     container_name: shop_database
     image: postgres:14.5
     env_file:
-      - ./.env
+      - .env
+    environment:
+      POSTGRES_NAME: ${POSTGRES_NAME}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     restart: always
     healthcheck:
       test: pg_isready -q --username=$$POSTGRES_USER --dbname=$$POSTGRES_DB
@@ -35,8 +22,9 @@ services:
       interval: 10s
       retries: 10
     volumes:
-      - postgres_data:/var/lib/postgresql/data/
       - postgres_socket:/var/run/postgresql/
+    networks:
+      - nginx_default
   redis:
     container_name: shop_project_redis
     image: redis:latest
@@ -49,17 +37,21 @@ services:
     networks:
       - nginx_default
   celery:
+    build:
+      dockerfile: dockerfiles/Dockerfile
+      context: .
     container_name: shop_project_celery_worker
     command: worker
-    <<: *app-common
   shop:
+    build:
+      dockerfile: dockerfiles/Dockerfile
+      context: .
     container_name: shop_project_django
     command: server
     stdin_open: true
     ports:
       - "8000:8000"
     tty: true
-    <<: *app-common
     networks:
       - nginx_default
   nginx:
@@ -76,7 +68,6 @@ services:
 
 
 volumes:
-  postgres_data:
   postgres_socket:
 
 networks:
