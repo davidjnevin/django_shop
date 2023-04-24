@@ -1,9 +1,5 @@
-import os
 from pathlib import Path
 
-from decouple import Csv, config
-from dj_database_url import parse
-from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -118,15 +114,4 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 CART_SESSION_ID = "cart"
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-
-# Stripe Keys
-STRIPE_PUBLISHABLE_KEY = config("STRIPE_PUBLISHABLE_KEY")
-STRIPE_SECRET_KEY = config("STRIPE_SECRET_KEY")
-STRIPE_API_VERSION = config("STRIPE_API_VERSION")
-STRIPE_WEBHOOK_SECRET = config("STRIPE_WEBHOOK_SECRET")
-
-# redis settings
-REDIS_HOST = config("REDIS_HOST")
-REDIS_PORT = config("REDIS_PORT")
-REDIS_DB = config("REDIS_DB")
 
