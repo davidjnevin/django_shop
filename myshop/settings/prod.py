@@ -3,7 +3,7 @@ import os
 from .base import *
 
 
-DEBUG = False
+DEBUG = True
 
 ADMINS = [ (os.environ.get("ADMIN_NAME"), os.environ.get("ADMIN_EMAIL")), ]
 
