@@ -1,4 +1,4 @@
-FROM python:3.10.6
+FROM python:3.10
 
 
 ENV PYTHONUNBUFFERED 1
@@ -10,7 +10,6 @@ COPY requirements-dev.txt /tmp/requirements-dev.txt
 RUN set -ex ;\
 	apt-get update -y ; \
 	apt-get install -y --no-install-recommends gettext ;\
-	pip install --upgrade pip ;\
 	pip install --no-cache-dir -r /tmp/requirements-dev.txt ;\
 	useradd -U app_user ;\
 	install -d -m 0755 -o app_user -g app_user /app/static ;\
@@ -20,7 +19,9 @@ RUN set -ex ;\
 WORKDIR /app
 USER app_user:app_user
 
-COPY --chown=app_user:app_user . /app
+COPY --chown=app_user:app_user . .
+RUN chmod +x uwsgi_app.sock
 
 ENTRYPOINT [ "/app/entrypoint.sh" ]
 CMD [ "server" ]
+
