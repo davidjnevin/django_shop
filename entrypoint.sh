@@ -77,7 +77,7 @@ case $1 in
 		django_operations ;\
 		wait_other_containers ;\
                 django_operations ;\
-                uwsgi --ini /app/config/uwsgi/uwsgi.ini
+				wsgi --ini /app/config/uwsgi/uwsgi.ini:application
                 ;;
 	"createsuperuser")
 		wait_other_containers ;\
