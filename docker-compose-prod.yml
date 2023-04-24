@@ -1,0 +1,72 @@
+version: '3.9'
+
+services:
+  # database
+  db:
+    container_name: shop_database
+    image: postgres:14.5
+    env_file:
+      - ./.env
+    restart: always
+    healthcheck:
+      test: pg_isready -q --username=$$POSTGRES_USER --dbname=$$POSTGRES_NAME
+      timeout: 45s
+      interval: 10s
+      retries: 10
+    expose:
+      - "5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+      - postgres_socket:/var/run/postgresql/
+
+  # redis
+  redis:
+    container_name: shop_project_redis
+    image: redis:latest
+    restart: always
+    healthcheck:
+      test: redis-cli ping
+      timeout: 45s
+      interval: 10s
+      retries: 10
+
+
+  celery:
+    container_name: shop_project_celery_worker
+    env_file:
+      - ./.env
+    build:
+      context: .
+      dockerfile: dockerfiles/Dockerfile
+    command: worker
+
+
+  shop:
+    container_name: shop_project_django
+    env_file:
+      - ./.env
+    build:
+      context: .
+      dockerfile: dockerfiles/Dockerfile
+    ports:
+      - "8000:8000" #host:container
+    volumes:
+      - ./:/app
+    command: server
+    depends_on:
+      - db
+      - redis
+      - celery
+
+  nginx:
+    image: nginx:1.23.1
+    restart: always
+    volumes:
+      - ./config/nginx:/etc/nginx/templates
+      - ./:/app
+    ports:
+      - "84:84"
+
+volumes:
+  postgres_data:
+  postgres_socket:
