@@ -1,7 +1,8 @@
-config
 venv
 dockerfiles/Dockerfile
 docker-compose.yml
+docker-compose-dev.yml
+docker-compose-prod.yml
 .git
 *.db
 docs/
