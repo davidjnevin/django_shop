@@ -1,39 +1,20 @@
 version: '3.9'
 
-x-app-common: &app-common
-  image: davidjnevin/shop_django:dev
-  build:
-    dockerfile: dockerfiles/Dockerfile
-    context: .
-  stdin_open: true
-  tty: true
-  env_file:
-    - ./.env
-  restart: always
-  depends_on:
-    db:
-      condition: service_healthy
-    redis:
-      condition: service_healthy
-  volumes:
-    - postgres_socket:/var/run/postgresql
-    - ./:/app
-
 services:
-  db:
-    container_name: shop_database
-    image: postgres:14.5
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: rabbitmq
+    ports:
+        - 5672:5672
+        - 15672:15672
+    volumes:
+        - rabbitmq_data:/var/lib/rabbitmq/
+        - rabbitmq_log:/var/log/rabbitmq
     env_file:
       - ./.env
-    restart: always
-    healthcheck:
-      test: pg_isready -q --username=$$POSTGRES_USER --dbname=$$POSTGRES_NAME
-      timeout: 45s
-      interval: 10s
-      retries: 10
-    volumes:
-      - postgres_data:/var/lib/postgresql/data/
-      - postgres_socket:/var/run/postgresql/
+    # networks:
+    #    - rabbitmq_go_net
+
   redis:
     container_name: shop_project_redis
     image: redis:latest
@@ -43,18 +24,30 @@ services:
       timeout: 45s
       interval: 10s
       retries: 10
+    env_file:
+      - ./.env
+
   celery:
     container_name: shop_project_celery_worker
+    build:
+      dockerfile: dockerfiles/Dockerfile
+      context: .
     command: worker
-    <<: *app-common
+    env_file:
+      - ./.env
+
   shop:
     container_name: shop_project_django
+    build:
+      dockerfile: dockerfiles/Dockerfile
+      context: .
     command: server
     stdin_open: true
     ports:
       - "8000:8000"
-    tty: true
-    <<: *app-common
+    env_file:
+      - ./.env
+
   nginx:
     image: nginx:1.23.1
     restart: always
@@ -63,7 +56,9 @@ services:
       - ./:/app
     ports:
       - "84:84"
+    env_file:
+      - ./.env
 
 volumes:
-  postgres_data:
-  postgres_socket:
+  rabbitmq_data:
+  rabbitmq_log:

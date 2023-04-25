@@ -20,8 +20,7 @@ WORKDIR /app
 USER app_user:app_user
 
 COPY --chown=app_user:app_user . .
-RUN chmod +x uwsgi_app.sock
 
-ENTRYPOINT [ "/app/entrypoint.sh" ]
+ENTRYPOINT [ "/app/dev-entrypoint.sh" ]
 CMD [ "server" ]
 
